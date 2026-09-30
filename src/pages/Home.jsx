@@ -1,93 +1,81 @@
 import { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { FaHeart, FaRegHeart, FaStar, FaClock, FaArrowRight, FaTimes, FaFire, FaUtensils } from 'react-icons/fa';
 import { RecipeContext } from '../components/RecipeContext';
 
-function Home() {
-  const { filteredRecipes, loading, filter, setFilter, isSaved, toggleSave } = useContext(RecipeContext);
+export default function Home() {
+  const { filteredRecipes, loading, isSaved, toggleSave } = useContext(RecipeContext);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   const previewRecipes = filteredRecipes.slice(0, 8);
-
-  const handleFilterClick = (type, value) => {
-    if (filter.type === type && filter.value === value) {
-      setFilter({ type: null, value: null });
-    } else {
-      setFilter({ type, value });
-    }
-  };
+  const featuredRecipe = filteredRecipes.length > 0 ? filteredRecipes[0] : null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Hero Section */}
       <div className="grid lg:grid-cols-2 gap-10 items-center mb-16">
+        
+        {/* Left Side: Text */}
         <div>
           <span className="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Cook something bright</span>
+          
           <h1 className="text-4xl lg:text-5xl font-extrabold text-stone-900 mt-4 leading-tight">
             Find a recipe you'll love, <span className="text-orange-500">cook it tonight.</span>
           </h1>
+          
+          {/* Condensed text from 2 long paragraphs to 1 short one */}
           <p className="text-stone-600 mt-4 leading-relaxed">
-            Bright Recipes brings you hundreds of tested dishes — from quick weeknight dinners to weekend baking projects — with clear ingredients, step-by-step instructions, prep times and nutrition at a glance.
+            Hundreds of tested dishes with clear instructions, prep times, and nutrition at a glance. Filter by difficulty, cuisine, or meal type, and save your favourites to build your personal cookbook.
           </p>
-          <p className="text-stone-600 mt-3">
-            Filter by difficulty, cuisine or meal type, save your favourites, and build a personal cookbook that lives right in your browser.
-          </p>
-          <div className="flex gap-4 mt-6">
-            <a href="#recipes" className="bg-orange-500 text-white px-6 py-2.5 rounded-full font-medium flex items-center gap-2 hover:bg-orange-600">
+          
+          {/* Responsive Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 mt-6">
+            <a 
+              href="#recipes" 
+              className="w-full sm:w-auto justify-center whitespace-nowrap bg-orange-500 text-white px-6 py-3 rounded-full font-medium flex items-center gap-2 hover:bg-orange-600 transition"
+            >
               Browse recipes <FaArrowRight size={12} />
             </a>
-            <a href="#categories" className="border border-stone-300 bg-white text-stone-700 px-6 py-2.5 rounded-full font-medium hover:border-orange-500">
+            <Link 
+              to="/recipes" 
+              className="w-full sm:w-auto justify-center whitespace-nowrap border border-stone-300 bg-white text-stone-700 px-6 py-3 rounded-full font-medium hover:border-orange-500 transition flex items-center"
+            >
               Explore categories
-            </a>
+            </Link>
           </div>
         </div>
 
-        {/* Categories */}
-        <div id="categories" className="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm">
-          <h2 className="text-xl font-bold text-stone-900">Filter by category</h2>
-          <p className="text-sm text-stone-500 mb-4">Tap a tag to instantly narrow the recipe list.</p>
-          
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-xs font-bold text-stone-500 uppercase mb-2">Difficulty</h3>
-              <div className="flex gap-2">
-                {['Easy', 'Medium', 'Hard'].map(val => (
-                  <button key={val} onClick={() => handleFilterClick('difficulty', val)} 
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium border ${filter.type === 'difficulty' && filter.value === val ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-stone-700 border-stone-300'}`}>
-                    {val}
-                  </button>
-                ))}
-              </div>
+        {/* Right Side: Featured Recipe from API */}
+        {featuredRecipe && (
+          <div className="bg-white rounded-3xl border border-stone-200 shadow-sm overflow-hidden">
+            <div className="relative h-64">
+              <img src={featuredRecipe.image} alt={featuredRecipe.name} className="w-full h-full object-cover" />
+              <span className="absolute top-4 left-4 bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold uppercase">
+                Featured Recipe
+              </span>
             </div>
-            <div>
-              <h3 className="text-xs font-bold text-stone-500 uppercase mb-2">Cuisine</h3>
-              <div className="flex flex-wrap gap-2">
-                {['Italian', 'Asian', 'Mexican', 'Pakistani', 'Japanese', 'Mediterranean'].map(val => (
-                  <button key={val} onClick={() => handleFilterClick('cuisine', val)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium border ${filter.type === 'cuisine' && filter.value === val ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-stone-700 border-stone-300'}`}>
-                    {val}
-                  </button>
-                ))}
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-stone-900">{featuredRecipe.name}</h2>
+              <div className="flex items-center gap-4 text-sm text-stone-500 mt-2 mb-4">
+                <span className="flex items-center gap-1"><FaStar className="text-amber-400" /> {featuredRecipe.rating}</span>
+                <span className="flex items-center gap-1"><FaUtensils /> {featuredRecipe.cuisine}</span>
+                <span className="flex items-center gap-1"><FaClock /> {featuredRecipe.prepTimeMinutes + featuredRecipe.cookTimeMinutes} min</span>
               </div>
-            </div>
-            <div>
-              <h3 className="text-xs font-bold text-stone-500 uppercase mb-2">Meal Type</h3>
-              <div className="flex flex-wrap gap-2">
-                {['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Dessert'].map(val => (
-                  <button key={val} onClick={() => handleFilterClick('mealType', val)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium border ${filter.type === 'mealType' && filter.value === val ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-stone-700 border-stone-300'}`}>
-                    {val}
-                  </button>
-                ))}
-              </div>
+              <button 
+                onClick={() => setSelectedRecipe(featuredRecipe)} 
+                className="w-full bg-stone-900 text-white py-2.5 rounded-full font-medium hover:bg-stone-800 transition"
+              >
+                View Full Recipe
+              </button>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Recipe Grid */}
       <div id="recipes">
         <h2 className="text-3xl font-bold text-stone-900 mb-2">Featured recipes</h2>
-        <p className="text-stone-500 mb-6">{filter.type ? `Showing ${filter.value} recipes` : 'The first 8 dishes from our collection'}</p>
+        <p className="text-stone-500 mb-6">{filteredRecipes.length} recipes available</p>
 
         {loading ? (
           <p className="text-stone-500">Loading recipes...</p>
@@ -119,7 +107,7 @@ function Home() {
         )}
       </div>
 
-
+      {/* Modal */}
       {selectedRecipe && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setSelectedRecipe(null)}>
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
@@ -135,7 +123,7 @@ function Home() {
               <div className="flex gap-4 text-sm text-stone-500 mb-6">
                 <span className="flex items-center gap-1"><FaStar className="text-amber-400" /> {selectedRecipe.rating}</span>
                 <span className="flex items-center gap-1"><FaUtensils /> {selectedRecipe.cuisine}</span>
-                <span className="flex items-center gap-1"><FaClock /> {selectedRecipe.prepTimeMinutes}m prep . {selectedRecipe.cookTimeMinutes}m cook</span>
+                <span className="flex items-center gap-1"><FaClock /> {selectedRecipe.prepTimeMinutes}m prep • {selectedRecipe.cookTimeMinutes}m cook</span>
               </div>
               
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
@@ -161,9 +149,9 @@ function Home() {
                 <div>
                   <h3 className="font-bold text-stone-900 mb-2">Ingredients</h3>
                   <ul className="space-y-1">
-                    {selectedRecipe.ingredients.map((x, y) => (
-                      <li key={y} className="text-sm text-stone-600 flex gap-2 items-center">
-                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span> {x}
+                    {selectedRecipe.ingredients.map((ing, idx) => (
+                      <li key={idx} className="text-sm text-stone-600 flex gap-2 items-center">
+                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span> {ing}
                       </li>
                     ))}
                   </ul>
@@ -171,9 +159,9 @@ function Home() {
                 <div>
                   <h3 className="font-bold text-stone-900 mb-2">Instructions</h3>
                   <ol className="space-y-2">
-                    {selectedRecipe.instructions.map((step, y) => (
-                      <li key={y} className="text-sm text-stone-600 flex gap-2">
-                        <span className="bg-orange-100 text-orange-700 font-bold rounded-full w-5 h-5 flex items-center justify-center text-xs shrink-0">{y + 1}</span>
+                    {selectedRecipe.instructions.map((step, idx) => (
+                      <li key={idx} className="text-sm text-stone-600 flex gap-2">
+                        <span className="bg-orange-100 text-orange-700 font-bold rounded-full w-5 h-5 flex items-center justify-center text-xs shrink-0">{idx + 1}</span>
                         {step}
                       </li>
                     ))}
@@ -187,5 +175,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

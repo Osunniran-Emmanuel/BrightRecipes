@@ -3,19 +3,24 @@ import { Link } from 'react-router-dom';
 import { FaHeart, FaTrash, FaStar, FaClock, FaArrowLeft, FaUtensils } from 'react-icons/fa';
 import { RecipeContext } from '../components/RecipeContext';
 
-function Saved() {
+export default function Saved() {
   const { saved, removeSaved } = useContext(RecipeContext);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <div className="flex justify-between items-center mb-8">
+      {/* Flex container changed to stack on mobile */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-stone-900">Saved recipes</h1>
           <p className="text-stone-500 mt-2">
             {saved.length === 0 ? 'Nothing saved yet.' : `${saved.length} recipe(s) in your personal cookbook.`}
           </p>
         </div>
-        <Link to="/recipes" className="bg-orange-500 text-white px-6 py-2.5 rounded-full font-medium items-center hover:bg-orange-600">
+        {/* Added whitespace-nowrap to prevent arrow from breaking layout */}
+        <Link 
+          to="/recipes" 
+          className="flex items-center gap-2 whitespace-nowrap border border-stone-300 text-stone-700 px-5 py-2.5 rounded-full text-sm font-medium hover:border-orange-500 transition"
+        >
           <FaArrowLeft size={12} /> Browse more
         </Link>
       </div>
@@ -59,5 +64,3 @@ function Saved() {
     </div>
   );
 }
-
-export default Saved;
