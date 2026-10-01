@@ -8,7 +8,7 @@ export default function Saved() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      {/* Flex container changed to stack on mobile */}
+
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-stone-900">Saved recipes</h1>
@@ -16,7 +16,7 @@ export default function Saved() {
             {saved.length === 0 ? 'Nothing saved yet.' : `${saved.length} recipe(s) in your personal cookbook.`}
           </p>
         </div>
-        {/* Added whitespace-nowrap to prevent arrow from breaking layout */}
+      
         <Link 
           to="/recipes" 
           className="flex items-center gap-2 whitespace-nowrap border border-stone-300 text-stone-700 px-5 py-2.5 rounded-full text-sm font-medium hover:border-orange-500 transition"

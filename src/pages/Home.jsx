@@ -12,10 +12,10 @@ export default function Home() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      {/* Hero Section */}
+  
       <div className="grid lg:grid-cols-2 gap-10 items-center mb-16">
         
-        {/* Left Side: Text */}
+      
         <div>
           <span className="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full uppercase">Cook something bright</span>
           
@@ -23,12 +23,12 @@ export default function Home() {
             Find a recipe you'll love, <span className="text-orange-500">cook it tonight.</span>
           </h1>
           
-          {/* Condensed text from 2 long paragraphs to 1 short one */}
+        
           <p className="text-stone-600 mt-4 leading-relaxed">
             Hundreds of tested dishes with clear instructions, prep times, and nutrition at a glance. Filter by difficulty, cuisine, or meal type, and save your favourites to build your personal cookbook.
           </p>
           
-          {/* Responsive Buttons */}
+    
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
             <a 
               href="#recipes" 
@@ -45,7 +45,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right Side: Featured Recipe from API */}
+        
         {featuredRecipe && (
           <div className="bg-white rounded-3xl border border-stone-200 shadow-sm overflow-hidden">
             <div className="relative h-64">
@@ -72,7 +72,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* Recipe Grid */}
+     
       <div id="recipes">
         <h2 className="text-3xl font-bold text-stone-900 mb-2">Featured recipes</h2>
         <p className="text-stone-500 mb-6">{filteredRecipes.length} recipes available</p>
